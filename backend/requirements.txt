@@ -9,3 +9,4 @@ httpx
 playwright
 PyJWT
 bcrypt
+email-validator
