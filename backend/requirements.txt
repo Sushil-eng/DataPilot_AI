@@ -10,3 +10,4 @@ playwright
 PyJWT
 bcrypt
 email-validator
+requests
