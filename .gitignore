@@ -1,0 +1,38 @@
+# Dependencies
+node_modules
+frontend/node_modules
+
+# Build outputs
+dist
+dist-ssr
+frontend/dist
+
+# Environment variables
+.env
+*.local
+backend/.env
+
+# Python & Backend
+__pycache__/
+*.pyc
+backend/venv/
+backend/.venv/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
