@@ -4,6 +4,8 @@ pydantic
 pydantic-settings
 motor
 pymongo
+dnspython
+certifi
 python-dotenv
 httpx
 playwright
