@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const rawApiUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+export const API_BASE_URL = rawApiUrl.replace(/\/+$/, '');
 
 export interface DataFieldInfo {
   name: string;
@@ -210,47 +211,74 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     ...((options.headers as Record<string, string>) || {}),
   };
 
+  let response: Response;
   try {
-    const response = await fetch(url, { ...options, headers });
-    const result = await response.json();
+    response = await fetch(url, { ...options, headers });
+  } catch (err: any) {
+    throw new Error(`Backend server is unavailable. Please ensure the FastAPI backend is running at ${API_BASE_URL}`);
+  }
 
-    if (!response.ok || result.success === false) {
-      let errorMsg = 'An unexpected error occurred.';
-      
-      if (typeof result?.detail === 'string') {
-        errorMsg = result.detail;
-      } else if (result?.detail?.error?.message) {
-        errorMsg = result.detail.error.message;
-      } else if (result?.error?.message) {
-        errorMsg = result.error.message;
-      } else if (result?.message) {
-        errorMsg = result.message;
+  let result: any = null;
+  try {
+    result = await response.json();
+  } catch (parseErr) {
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error(`API endpoint not found (404): ${endpoint}. Please check API configuration.`);
+      }
+      if (response.status >= 500) {
+        throw new Error(`Server error (${response.status}): ${response.statusText}`);
+      }
+      throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+    }
+  }
+
+  if (!response.ok || (result && result.success === false)) {
+    let errorMsg = '';
+
+    if (typeof result?.detail === 'string') {
+      errorMsg = result.detail;
+    } else if (result?.detail?.error?.message) {
+      errorMsg = result.detail.error.message;
+    } else if (result?.error?.message) {
+      errorMsg = result.error.message;
+    } else if (result?.message) {
+      errorMsg = result.message;
+    } else {
+      if (response.status === 401) {
+        errorMsg = 'Invalid email or password';
+      } else if (response.status === 400) {
+        errorMsg = 'Bad request - invalid input data';
+      } else if (response.status === 404) {
+        errorMsg = `API endpoint not found (404): ${endpoint}`;
+      } else if (response.status >= 500) {
+        errorMsg = `Server error (${response.status}). Please try again later.`;
       } else {
         errorMsg = `HTTP Error ${response.status}: ${response.statusText}`;
       }
-      
-      throw new Error(errorMsg);
     }
 
-    let data = result.data;
-    if (data && typeof data === 'object') {
-      if (data._id && !data.id) data.id = data._id;
-      if (Array.isArray(data.items)) {
-        data.items = data.items.map((item: any) => {
-          if (item && item._id && !item.id) item.id = item._id;
-          return item;
-        });
-      }
-    }
-
-    return data as T;
-  } catch (err: any) {
-    if (err.name === 'TypeError' && err.message.includes('fetch')) {
-      throw new Error('Backend server is unavailable. Please ensure the FastAPI backend is running at ' + API_BASE_URL);
-    }
-    throw err;
+    throw new Error(errorMsg);
   }
+
+  let data = (result && result.data !== undefined) ? result.data : result;
+  if (data && typeof data === 'object') {
+    if (data._id && !data.id) data.id = data._id;
+    if (Array.isArray(data.items)) {
+      data.items = data.items.map((item: any) => {
+        if (item && item._id && !item.id) item.id = item._id;
+        return item;
+      });
+    }
+  }
+
+  return data as T;
 }
+
+export async function getHealthCheck(): Promise<{ status: string; service?: string }> {
+  return request<{ status: string; service?: string }>('/health');
+}
+
 
 // ==================================================
 // TASK SERVICES

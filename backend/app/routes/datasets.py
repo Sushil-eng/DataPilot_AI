@@ -25,7 +25,7 @@ def error_response(message: str, status_code: int = 400):
 @router.get("/datasets/{dataset_id}/export")
 async def export_dataset(
     dataset_id: str,
-    format: str = Query("csv", regex="^(csv|json)$"),
+    format: str = Query("csv", pattern="^(csv|json)$"),
     current_user: Optional[dict] = Depends(get_optional_user)
 ):
     """
@@ -140,7 +140,7 @@ async def list_dataset_records(
     limit: int = Query(10, ge=1, le=500),
     search: Optional[str] = None,
     sort_by: Optional[str] = None,
-    order: str = Query("desc", regex="^(asc|desc)$"),
+    order: str = Query("desc", pattern="^(asc|desc)$"),
     current_user: Optional[dict] = Depends(get_optional_user)
 ):
     user_id = current_user["id"] if current_user else None

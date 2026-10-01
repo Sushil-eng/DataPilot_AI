@@ -39,8 +39,16 @@ app = FastAPI(
 )
 
 cors_list = [origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()]
+if settings.frontend_url and settings.frontend_url.strip() not in cors_list:
+    cors_list.append(settings.frontend_url.strip())
+
 if not cors_list:
-    cors_list = ["*"]
+    cors_list = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ]
 
 app.add_middleware(
     CORSMiddleware,
@@ -50,6 +58,15 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"]
 )
+
+@app.get("/")
+def root():
+    return {
+        "status": "ok",
+        "service": "DataPilot AI Backend",
+        "message": "Backend is running"
+    }
+
 
 # Custom Global Exception Handlers for Clean JSON Error Responses
 

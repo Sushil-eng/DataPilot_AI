@@ -5,7 +5,9 @@ class Settings(BaseSettings):
     mongodb_username: str = ""
     mongodb_uri: str = "mongodb://localhost:27017"
     database_name: str = "datapilot"
+    mongodb_fallback_local: bool = False
     frontend_url: str = "http://localhost:5173"
+
 
     # ── Search Provider (Phase 4) ──
     search_provider: str = "mock"
