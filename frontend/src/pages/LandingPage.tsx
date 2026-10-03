@@ -123,8 +123,12 @@ const LandingPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-dp-bg text-dp-text relative overflow-x-hidden selection:bg-dp-accent/30 selection:text-white flex flex-col items-center">
       {/* ── Background Ambient Glow System ── */}
+      {/* Fixed ambient grid — covers whole viewport */}
       <div className="bg-ambient-grid fixed inset-0 pointer-events-none z-0" />
-      <div className="hero-gradient-glow" />
+      {/* Decorative glow — wrapped in overflow-hidden so it can never shift page layout */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        <div className="hero-gradient-glow" />
+      </div>
 
       {/* ── Task 4: Responsive Floating Navbar ── */}
       <header className="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-white/10">
@@ -149,7 +153,7 @@ const LandingPage: React.FC = () => {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-dp-text-secondary">
             <a href="#features" className="hover:text-dp-text transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-dp-text transition-colors">How It Works</a>
-            <a href="#metrics" className="hover:text-dp-text transition-colors">Metrics</a>
+            <a href="#metrics" className="hover:text-dp-text transition-colors">Analytics</a>
           </nav>
 
           {/* Action Buttons - Right Aligned */}
@@ -176,7 +180,7 @@ const LandingPage: React.FC = () => {
           {/* Mobile Hamburger Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(prev => !prev)}
-            className="sm:hidden p-2 rounded-lg text-dp-text-secondary hover:text-dp-text hover:bg-white/5 transition-colors"
+            className="sm:hidden p-2 rounded-lg text-dp-text-secondary hover:text-dp-text hover:bg-black/5 transition-colors"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -185,25 +189,25 @@ const LandingPage: React.FC = () => {
 
         {/* Mobile Dropdown Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="sm:hidden bg-dp-bg-raised/95 border-b border-white/10 px-4 pt-3 pb-5 flex flex-col gap-3 backdrop-blur-xl animate-fade-in">
+          <div className="sm:hidden bg-white/95 border-b border-black/8 px-4 pt-3 pb-5 flex flex-col gap-3 backdrop-blur-xl animate-fade-in">
             <a 
               href="#features" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-sm font-medium text-dp-text-secondary hover:text-dp-text py-1.5 border-b border-white/5"
+              className="text-sm font-medium text-dp-text-secondary hover:text-dp-text py-1.5 border-b border-black/6"
             >
               Features
             </a>
             <a 
               href="#how-it-works" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-sm font-medium text-dp-text-secondary hover:text-dp-text py-1.5 border-b border-white/5"
+              className="text-sm font-medium text-dp-text-secondary hover:text-dp-text py-1.5 border-b border-black/6"
             >
               How It Works
             </a>
             <a 
               href="#metrics" 
               onClick={() => setMobileMenuOpen(false)}
-              className="text-sm font-medium text-dp-text-secondary hover:text-dp-text py-1.5 border-b border-white/5"
+              className="text-sm font-medium text-dp-text-secondary hover:text-dp-text py-1.5 border-b border-black/6"
             >
               Metrics
             </a>
@@ -230,11 +234,11 @@ const LandingPage: React.FC = () => {
         )}
       </header>
 
-      {/* ── Task 2: Perfectly Centered Hero Section ── */}
-      <section className="w-full pt-32 sm:pt-40 lg:pt-44 pb-16 px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center">
+      {/* ── Hero Section — padding computed from --header-height CSS variable ── */}
+      <section className="hero-section w-full pb-20 px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center">
         <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center">
           {/* Release Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full glass-panel border-dp-accent/30 text-dp-accent text-xs font-semibold mb-8 animate-fade-in shadow-glow">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full glass-panel border-dp-accent/30 text-dp-accent text-xs font-semibold mb-10 animate-fade-in shadow-glow">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-dp-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-dp-accent"></span>
@@ -247,18 +251,18 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* Centered Main Heading */}
-          <h1 className="w-full text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-dp-text leading-[1.16] mb-6 font-display text-center">
+          <h1 className="w-full text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-dp-text leading-[1.18] mb-8 font-display text-center">
             Turn Business Questions <br className="hidden sm:inline" />
             <span className="text-gradient-orange">Into Actionable Datasets</span>
           </h1>
 
           {/* Centered Description */}
-          <p className="w-full text-base sm:text-lg lg:text-xl text-dp-text-secondary max-w-2xl mx-auto text-center mb-8 leading-relaxed font-sans">
+          <p className="w-full text-base sm:text-lg lg:text-xl text-dp-text-secondary max-w-2xl mx-auto text-center mb-10 leading-loose font-sans">
             Describe what data you need in plain English. DataPilot AI autonomously plans schemas, discovers sources, extracts fields, validates quality, and organizes information into source-backed datasets.
           </p>
 
           {/* Centered CTA Buttons */}
-          <div className="flex items-center justify-center gap-4 flex-wrap mb-10 w-full">
+          <div className="flex items-center justify-center gap-5 flex-wrap mb-8 w-full">
             <Button
               size="lg"
               icon={<ArrowRight className="w-5 h-5" />}
@@ -273,36 +277,36 @@ const LandingPage: React.FC = () => {
               size="lg"
               icon={<Play className="w-4 h-4 text-dp-accent fill-dp-accent" />}
               onClick={() => navigate('/dashboard')}
-              className="glass-panel text-dp-text border-dp-border hover:border-dp-accent/40 rounded-xl px-7 py-3.5 font-semibold hover:bg-dp-bg-surface"
+              className="bg-white text-dp-text-secondary border border-black/12 hover:border-dp-accent/50 hover:text-dp-accent rounded-xl px-7 py-3.5 font-semibold hover:bg-orange-50 shadow-sm"
             >
               Explore Live Dashboard
             </Button>
           </div>
 
           {/* Centered Feature Micro-Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-medium text-dp-text-muted mb-14 w-full">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>No Code Scraper Setup</span>
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-12 text-sm font-medium text-dp-text-muted mb-20 w-full">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span className="text-dp-text-secondary">No Code Scraper Setup</span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>100% Source-Backed Records</span>
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span className="text-dp-text-secondary">100% Source-Backed Records</span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Automated Deduplication</span>
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span className="text-dp-text-secondary">Automated Deduplication</span>
             </div>
           </div>
         </div>
 
         {/* ── Task 3: Centered Responsive Dashboard Preview ── */}
         <div className="w-full max-w-5xl mx-auto relative">
-          <div className="absolute -inset-1.5 bg-gradient-to-r from-dp-accent/25 via-violet-500/15 to-amber-500/25 rounded-3xl blur-2xl opacity-60" />
+          <div className="absolute -inset-1.5 bg-gradient-to-r from-dp-accent/15 via-violet-500/8 to-amber-500/15 rounded-3xl blur-2xl opacity-50" />
           
-          <div className="relative w-full rounded-2xl glass-panel border border-white/10 overflow-hidden shadow-card-hover">
+          <div className="relative w-full rounded-2xl glass-panel border border-black/8 overflow-hidden shadow-card-hover">
             {/* Mock Window Header */}
-            <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-white/10 bg-dp-bg-raised/90">
+            <div className="flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-black/8 bg-slate-50/90">
               <div className="flex items-center gap-2 min-w-0">
                 <div className="w-3 h-3 rounded-full bg-rose-500/80 shrink-0" />
                 <div className="w-3 h-3 rounded-full bg-amber-500/80 shrink-0" />
@@ -318,15 +322,15 @@ const LandingPage: React.FC = () => {
             </div>
 
             {/* Mock Dashboard Content Grid */}
-            <div className="p-4 sm:p-6 lg:p-8 bg-dp-bg-raised/60 backdrop-blur-md">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+            <div className="p-5 sm:p-7 lg:p-9 bg-slate-50/80">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 mb-7">
                 {[
                   { label: 'Active Tasks', value: '12', sub: '3 running pipelines', color: 'text-orange-400' },
                   { label: 'Total Records', value: '48,290', sub: '+1,420 today', color: 'text-cyan-400' },
                   { label: 'Verified Sources', value: '1,842', sub: '99.2% reachability', color: 'text-violet-400' },
                   { label: 'Clean Datasets', value: '34', sub: 'Ready for export', color: 'text-emerald-400' },
                 ].map((stat) => (
-                  <div key={stat.label} className="p-3.5 sm:p-4 rounded-xl glass-panel border-white/5 bg-dp-bg-surface/80">
+                  <div key={stat.label} className="p-4 sm:p-5 rounded-xl bg-white border border-black/6 shadow-sm">
                     <p className="text-[10px] sm:text-[11px] font-semibold text-dp-text-muted uppercase tracking-wider mb-1 truncate">{stat.label}</p>
                     <p className={`text-xl sm:text-2xl font-bold font-display ${stat.color}`}>{stat.value}</p>
                     <p className="text-[10px] text-dp-text-muted mt-1 truncate">{stat.sub}</p>
@@ -335,15 +339,15 @@ const LandingPage: React.FC = () => {
               </div>
 
               {/* Extraction Speed Bar Chart */}
-              <div className="p-4 sm:p-5 rounded-xl glass-panel border-white/5 bg-dp-bg-surface/60 w-full overflow-hidden">
+              <div className="p-5 sm:p-6 rounded-xl bg-white border border-black/6 shadow-sm w-full overflow-hidden">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-dp-accent" />
                     <span className="text-xs sm:text-sm font-semibold text-dp-text">Extraction Throughput & Speed</span>
                   </div>
-                  <span className="text-[10px] font-mono text-dp-text-muted bg-white/5 px-2 py-0.5 rounded">Live Stream</span>
+                  <span className="text-[10px] font-mono text-dp-text-muted bg-black/5 px-2 py-0.5 rounded">Live Stream</span>
                 </div>
-                <div className="h-32 sm:h-36 flex items-end justify-between gap-1.5 sm:gap-2 pt-4 px-2 border-b border-white/5 w-full">
+                <div className="h-40 sm:h-48 flex items-end justify-between gap-1.5 sm:gap-2.5 pt-4 px-2 border-b border-black/8 w-full">
                   {[35, 55, 42, 78, 65, 92, 70, 88, 60, 95, 82, 100].map((height, i) => (
                     <div key={i} className="flex-1 flex flex-col justify-end items-center h-full group">
                       <div 
@@ -360,9 +364,9 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* ── Task 5: Statistics Bar Section ── */}
-      <section id="metrics" className="w-full py-12 border-y border-white/10 bg-dp-bg-raised/40 flex justify-center">
+      <section id="metrics" className="w-full py-16 sm:py-20 border-y border-black/8 bg-slate-50 flex justify-center">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12 text-center">
             {METRICS.map((metric) => (
               <div key={metric.label} className="space-y-1">
                 <p className="text-2xl sm:text-4xl font-extrabold text-dp-text font-display text-gradient-orange">{metric.value}</p>
@@ -375,36 +379,36 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* ── Task 5: How It Works Section ── */}
-      <section id="how-it-works" className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center">
+      <section id="how-it-works" className="w-full py-24 sm:py-32 px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center">
         <div className="w-full max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
             <span className="text-xs font-bold uppercase tracking-wider text-dp-accent bg-dp-accent/10 px-3 py-1 rounded-full border border-dp-accent/20">Workflow Architecture</span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-dp-text tracking-tight mt-3 mb-4 font-display">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-dp-text tracking-tight mt-4 mb-5 font-display">
               Four Steps from Prompt to Dataset
             </h2>
-            <p className="text-dp-text-secondary text-sm sm:text-base">
+            <p className="text-dp-text-secondary text-sm sm:text-base leading-relaxed">
               DataPilot AI handles source discovery, scraping, field normalization, standardizing, and deduplication.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 w-full">
             {STEPS.map((step) => {
               const Icon = step.icon;
               return (
                 <div 
                   key={step.title}
-                  className="group relative p-6 rounded-2xl glass-panel glass-panel-hover flex flex-col justify-between"
+                  className="group relative p-7 sm:p-8 rounded-2xl glass-panel glass-panel-hover flex flex-col justify-between min-h-[220px]"
                 >
-                  <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center justify-between mb-8">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-dp-accent/20 to-orange-500/10 border border-dp-accent/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                       <Icon className="w-6 h-6 text-dp-accent" />
                     </div>
-                    <span className="text-xs font-mono font-bold text-dp-text-muted bg-white/5 px-2.5 py-1 rounded-md border border-white/5">{step.step}</span>
+                    <span className="text-xs font-mono font-bold text-dp-text-muted bg-black/4 px-2.5 py-1 rounded-md border border-black/8">{step.step}</span>
                   </div>
                   <div>
                     <span className="text-[11px] font-semibold text-dp-accent uppercase tracking-wider">{step.subtitle}</span>
-                    <h3 className="text-base sm:text-lg font-bold text-dp-text mt-1 mb-2 font-display">{step.title}</h3>
-                    <p className="text-xs text-dp-text-secondary leading-relaxed">{step.description}</p>
+                    <h3 className="text-base sm:text-lg font-bold text-dp-text mt-2 mb-3 font-display">{step.title}</h3>
+                    <p className="text-sm text-dp-text-secondary leading-relaxed">{step.description}</p>
                   </div>
                 </div>
               );
@@ -414,32 +418,32 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* ── Task 5: Features Section ── */}
-      <section id="features" className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-dp-bg-raised/30 border-t border-white/5 z-10 flex flex-col items-center">
+      <section id="features" className="w-full py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-slate-50 border-t border-black/6 z-10 flex flex-col items-center">
         <div className="w-full max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
             <span className="text-xs font-bold uppercase tracking-wider text-violet-400 bg-violet-500/10 px-3 py-1 rounded-full border border-violet-500/20">Capabilities</span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-dp-text tracking-tight mt-3 mb-4 font-display">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-dp-text tracking-tight mt-4 mb-5 font-display">
               Enterprise-Grade Platform Features
             </h2>
-            <p className="text-dp-text-secondary text-sm sm:text-base">
+            <p className="text-dp-text-secondary text-sm sm:text-base leading-relaxed">
               Built with FastAPI async backend, Motor MongoDB driver, and React TypeScript frontend.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 w-full">
             {FEATURES.map((feature) => {
               const Icon = feature.icon;
               return (
                 <div
                   key={feature.title}
-                  className="p-6 rounded-2xl glass-panel glass-panel-hover flex flex-col justify-between group"
+                  className="p-7 sm:p-8 rounded-2xl glass-panel glass-panel-hover flex flex-col justify-between group min-h-[200px]"
                 >
                   <div>
-                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.color} border border-white/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} border border-black/8 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                       <Icon className="w-5 h-5" />
                     </div>
-                    <h3 className="text-base font-bold text-dp-text mb-2 font-display">{feature.title}</h3>
-                    <p className="text-xs text-dp-text-secondary leading-relaxed">{feature.description}</p>
+                    <h3 className="text-base font-bold text-dp-text mb-3 font-display">{feature.title}</h3>
+                    <p className="text-sm text-dp-text-secondary leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               );
@@ -449,15 +453,15 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* ── Task 5: CTA Banner Section ── */}
-      <section className="w-full py-20 sm:py-24 px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center">
-        <div className="w-full max-w-5xl mx-auto relative rounded-3xl overflow-hidden glass-panel border-dp-accent/30 p-8 sm:p-14 text-center flex flex-col items-center">
-          <div className="absolute inset-0 bg-gradient-to-r from-dp-accent/20 via-violet-500/10 to-amber-500/20 blur-xl pointer-events-none" />
+      <section className="w-full py-24 sm:py-32 px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center">
+        <div className="w-full max-w-5xl mx-auto relative rounded-3xl overflow-hidden bg-gradient-to-br from-orange-50 via-white to-violet-50 border border-orange-100 shadow-lg p-10 sm:p-16 lg:p-20 text-center flex flex-col items-center">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-violet-500/5 to-amber-500/5 pointer-events-none" />
           
           <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center text-center">
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-dp-text tracking-tight mb-4 font-display">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-dp-text tracking-tight mb-6 font-display">
               Ready to Collect Data in Minutes?
             </h2>
-            <p className="text-dp-text-secondary text-sm sm:text-base mb-8">
+            <p className="text-dp-text-secondary text-sm sm:text-base mb-10 leading-relaxed">
               Experience prompt-driven autonomous data extraction. No web scrapers to configure, no manual formatting required.
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap w-full">
@@ -476,9 +480,9 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* ── Task 5: Footer ── */}
-      <footer className="w-full border-t border-white/10 py-10 px-4 sm:px-6 lg:px-8 bg-dp-bg-raised z-10 flex justify-center">
-        <div className="w-full max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-dp-text-muted">
-          <div className="flex items-center gap-3">
+      <footer className="w-full border-t border-black/8 py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white z-10 flex justify-center">
+        <div className="w-full max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-dp-text-muted">
+          <div className="flex items-center gap-4">
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-dp-accent to-orange-500 flex items-center justify-center">
               <Compass className="w-4 h-4 text-white" />
             </div>
@@ -486,7 +490,7 @@ const LandingPage: React.FC = () => {
             <span className="text-xs text-dp-text-muted">© 2026. All rights reserved.</span>
           </div>
 
-          <div className="flex items-center gap-6 text-xs text-dp-text-secondary flex-wrap justify-center">
+          <div className="flex items-center gap-8 text-sm text-dp-text-secondary flex-wrap justify-center">
             <button onClick={() => navigate('/dashboard')} className="hover:text-dp-text transition-colors">Dashboard</button>
             <button onClick={() => navigate('/new-task')} className="hover:text-dp-text transition-colors">New Task</button>
             <button onClick={() => navigate('/datasets')} className="hover:text-dp-text transition-colors">Datasets</button>
